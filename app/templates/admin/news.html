@@ -1,0 +1,128 @@
+{% extends 'admin_base.html' %}
+{% block admin_content %}
+<div class="row">
+    <!-- Header -->
+    <div class="col-12 d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-0 text-success">Manage News</h2>
+            <p class="text-muted">Publish, modify, or archive agricultural news reports and advisories.</p>
+        </div>
+        <button class="btn btn-primary-custom" data-bs-toggle="collapse" data-bs-target="#addNewsCollapse">
+            <i class="fas fa-plus me-2"></i>Publish News
+        </button>
+    </div>
+
+    <!-- Collapse Add News -->
+    <div class="col-12 mb-4 collapse" id="addNewsCollapse">
+        <div class="card card-custom p-4 border-0 shadow-sm">
+            <h5 class="fw-bold text-success mb-3">Publish News Bulletin</h5>
+            <form action="{{ url_for('admin.manage_news') }}" method="POST">
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        <label class="form-label fw-semibold">News Title *</label>
+                        <input type="text" name="title" class="form-control" required placeholder="e.g. Subsidy rates released">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Category</label>
+                        <select name="category" class="form-select">
+                            <option value="Schemes">Schemes & Subsidies</option>
+                            <option value="Weather">Weather Advisories</option>
+                            <option value="Technology">Technology & Research</option>
+                            <option value="General">General updates</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label fw-semibold">News Description *</label>
+                        <textarea name="description" class="form-control" rows="4" required></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success px-4 py-2">Publish Bulletin</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="col-12">
+        <div class="card card-custom border-0 shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">ID</th>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Published Date</th>
+                            <th class="pe-4 text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if news_list %}
+                            {% for n in news_list %}
+                            <tr>
+                                <td class="ps-4 text-muted">{{ n.id }}</td>
+                                <td class="fw-bold text-success">{{ n.title }}</td>
+                                <td><span class="badge bg-success-subtle text-success">{{ n.category or 'General' }}</span></td>
+                                <td class="small text-muted">{{ n.published_at.strftime('%d-%b-%Y %H:%M') }}</td>
+                                <td class="pe-4 text-end">
+                                    <button class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#editNewsModal{{ n.id }}">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <a href="{{ url_for('admin.delete_news', id=n.id) }}" class="btn btn-sm btn-outline-danger btn-delete-confirm" data-confirm-message="Are you sure you want to remove this news article?">
+                                        <i class="fas fa-trash-alt"></i> Delete
+                                    </a>
+                                </td>
+                            </tr>
+
+                            <!-- Edit Modal -->
+                            <div class="modal fade" id="editNewsModal{{ n.id }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content card-custom p-3 border-0">
+                                        <div class="modal-header border-0 pb-0">
+                                            <h5 class="modal-title fw-bold text-success">Modify News Bulletin</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form action="{{ url_for('admin.edit_news', id=n.id) }}" method="POST">
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-md-8 mb-3">
+                                                        <label class="form-label fw-semibold">News Title</label>
+                                                        <input type="text" name="title" class="form-control" value="{{ n.title }}" required>
+                                                    </div>
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label fw-semibold">Category</label>
+                                                        <select name="category" class="form-select">
+                                                            <option value="Schemes" {% if n.category == 'Schemes' %}selected{% endif %}>Schemes & Subsidies</option>
+                                                            <option value="Weather" {% if n.category == 'Weather' %}selected{% endif %}>Weather Advisories</option>
+                                                            <option value="Technology" {% if n.category == 'Technology' %}selected{% endif %}>Technology & Research</option>
+                                                            <option value="General" {% if n.category == 'General' %}selected{% endif %}>General updates</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label class="form-label fw-semibold">News Description</label>
+                                                        <textarea name="description" class="form-control" rows="4" required>{{ n.description }}</textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer border-0 pt-0">
+                                                <button type="button" class="btn btn-secondary-custom" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary-custom">Save Changes</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center py-4 text-muted">No news articles published.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

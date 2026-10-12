@@ -1,0 +1,157 @@
+{% extends 'farmer_base.html' %}
+{% block farmer_content %}
+
+<div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+        <h2 class="fw-bold mb-0 text-success" data-translate="welcome">Welcome, Farmer!</h2>
+        <p class="text-muted mb-0">Here is your daily agricultural overview for {{ district }}.</p>
+    </div>
+    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+        <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill"><i class="far fa-clock me-2"></i>Last Updated: Just now</span>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <!-- Card 1: Crops -->
+    <div class="col-md-4 mb-3">
+        <div class="card card-custom p-3 border-0 shadow-sm d-flex flex-row align-items-center justify-content-between">
+            <div>
+                <span class="text-muted small fw-semibold" data-translate="total_crops">Total Crops</span>
+                <h3 class="fw-bold mb-0 mt-1 text-success">{{ total_crops }}</h3>
+            </div>
+            <div class="fs-1 text-success opacity-50"><i class="fas fa-seedling"></i></div>
+        </div>
+    </div>
+    
+    <!-- Card 2: Today Weather -->
+    <div class="col-md-4 mb-3">
+        <div class="card card-custom p-3 border-0 shadow-sm d-flex flex-row align-items-center justify-content-between">
+            <div>
+                <span class="text-muted small fw-semibold" data-translate="today_temp">Today's Temp</span>
+                <h3 class="fw-bold mb-0 mt-1 text-success">{{ temp }}°C</h3>
+                <small class="text-muted">{{ weather_cond }}</small>
+            </div>
+            <div class="fs-1 text-warning opacity-50"><i class="fas fa-sun"></i></div>
+        </div>
+    </div>
+
+    <!-- Card 3: Humidity -->
+    <div class="col-md-4 mb-3">
+        <div class="card card-custom p-3 border-0 shadow-sm d-flex flex-row align-items-center justify-content-between">
+            <div>
+                <span class="text-muted small fw-semibold" data-translate="humidity">Humidity</span>
+                <h3 class="fw-bold mb-0 mt-1 text-success">{{ humidity }}%</h3>
+            </div>
+            <div class="fs-1 text-primary opacity-50"><i class="fas fa-tint"></i></div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Left Column: Weather Advisory & Recommendations -->
+    <div class="col-lg-8 mb-4">
+        <!-- Weather Advisory Card -->
+        <div class="card card-custom p-4 mb-4 border-0 shadow-sm">
+            <h5 class="fw-bold text-success mb-3"><i class="fas fa-cloud-sun me-2"></i>Weather recommendation</h5>
+            <div class="p-3 bg-light rounded-3 border-start border-4 border-success">
+                <p class="mb-0 text-muted">{{ weather_recommendation }}</p>
+            </div>
+        </div>
+
+        <!-- Recent Recommendations Card -->
+        <div class="card card-custom p-4 border-0 shadow-sm">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h5 class="fw-bold text-success mb-0" data-translate="recent_recommendations">Recent Recommendations</h5>
+                <a href="{{ url_for('farmer.crop_recommendation') }}" class="btn btn-sm btn-primary-custom py-1">New Test</a>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Season</th>
+                            <th>Soil Type</th>
+                            <th>Water Availability</th>
+                            <th>Recommended Crops</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if recent_recs %}
+                            {% for r in recent_recs %}
+                            <tr>
+                                <td><span class="badge bg-success-subtle text-success">{{ r.season }}</span></td>
+                                <td>{{ r.soil_type }}</td>
+                                <td>{{ r.water_availability }}</td>
+                                <td class="fw-bold text-success">{{ r.recommended_crops }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-4">No recommendation records found. Try generating one!</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Notifications & Quick Access -->
+    <div class="col-lg-4">
+        <!-- Notifications Card -->
+        <div class="card card-custom p-4 mb-4 border-0 shadow-sm">
+            <h5 class="fw-bold text-success mb-3" data-translate="notifications">Recent Notifications</h5>
+            <div class="d-flex flex-column gap-3">
+                {% if notifications %}
+                    {% for n in notifications %}
+                    <div class="p-3 rounded-3 {% if n.is_read %}bg-light text-muted{% else %}bg-success-subtle text-success border-start border-4 border-success{% endif %} position-relative">
+                        <h6 class="fw-bold mb-1 pe-4">{{ n.title }}</h6>
+                        <p class="small mb-1">{{ n.message }}</p>
+                        <small class="text-muted">{{ n.created_at.strftime('%d-%b %H:%M') }}</small>
+                        {% if not n.is_read %}
+                        <a href="{{ url_for('farmer.read_notification', id=n.id) }}" class="position-absolute top-0 end-0 p-2 text-success hover-opacity" title="Mark as read">
+                            <i class="fas fa-check-circle"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted text-center mb-0 py-3">No new notifications.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Quick Access Card -->
+        <div class="card card-custom p-4 border-0 shadow-sm">
+            <h5 class="fw-bold text-success mb-3" data-translate="quick_access">Quick Access</h5>
+            <div class="row g-2">
+                <div class="col-6">
+                    <a href="{{ url_for('farmer.crop_recommendation') }}" class="btn btn-outline-success w-100 py-3 text-center d-flex flex-column align-items-center gap-2">
+                        <i class="fas fa-seedling fs-4"></i>
+                        <span class="small fw-semibold">Crop Recs</span>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a href="{{ url_for('farmer.weather_advisory') }}" class="btn btn-outline-success w-100 py-3 text-center d-flex flex-column align-items-center gap-2">
+                        <i class="fas fa-cloud-sun fs-4"></i>
+                        <span class="small fw-semibold">Weather</span>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a href="{{ url_for('farmer.fertilizer_recommendation') }}" class="btn btn-outline-success w-100 py-3 text-center d-flex flex-column align-items-center gap-2">
+                        <i class="fas fa-flask fs-4"></i>
+                        <span class="small fw-semibold">Fertilizers</span>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a href="{{ url_for('farmer.pest_disease') }}" class="btn btn-outline-success w-100 py-3 text-center d-flex flex-column align-items-center gap-2">
+                        <i class="fas fa-bug fs-4"></i>
+                        <span class="small fw-semibold">Pest Patrol</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

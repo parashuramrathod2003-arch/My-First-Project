@@ -1,0 +1,142 @@
+{% extends 'admin_base.html' %}
+{% block admin_content %}
+<div class="row">
+    <!-- Header -->
+    <div class="col-12 d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-0 text-success">Manage Government Schemes</h2>
+            <p class="text-muted">Register, edit, or archive government subsidies, loan incentives, and insurance systems.</p>
+        </div>
+        <button class="btn btn-primary-custom" data-bs-toggle="collapse" data-bs-target="#addSchemeCollapse">
+            <i class="fas fa-plus me-2"></i>Add Scheme Details
+        </button>
+    </div>
+
+    <!-- Collapse Add Scheme -->
+    <div class="col-12 mb-4 collapse" id="addSchemeCollapse">
+        <div class="card card-custom p-4 border-0 shadow-sm">
+            <h5 class="fw-bold text-success mb-3">Add Government Scheme</h5>
+            <form action="{{ url_for('admin.manage_schemes') }}" method="POST">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Scheme Name *</label>
+                        <input type="text" name="scheme_name" class="form-control" required placeholder="e.g. PM-KISAN">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Application Deadline</label>
+                        <input type="text" name="deadline" class="form-control" placeholder="e.g. August 15, 2026 or Open Year-Round">
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label fw-semibold">Scheme Description *</label>
+                        <textarea name="description" class="form-control" rows="3" required placeholder="Provide overview description..."></textarea>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Benefits</label>
+                        <textarea name="benefits" class="form-control" rows="2" placeholder="Detail support amounts or benefits..."></textarea>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Eligibility</label>
+                        <textarea name="eligibility" class="form-control" rows="2" placeholder="Detail land or income limits..."></textarea>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label fw-semibold">Apply Link (URL)</label>
+                        <input type="url" name="apply_link" class="form-control" placeholder="https://scheme.gov.in">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success px-4 py-2">Create Scheme Listing</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="col-12">
+        <div class="card card-custom border-0 shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">ID</th>
+                            <th>Scheme Name</th>
+                            <th>Benefits Summary</th>
+                            <th>Deadline</th>
+                            <th class="pe-4 text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if schemes %}
+                            {% for s in schemes %}
+                            <tr>
+                                <td class="ps-4 text-muted">{{ s.id }}</td>
+                                <td class="fw-bold text-success">{{ s.scheme_name }}</td>
+                                <td class="small text-truncate-3" style="max-width: 300px;">{{ s.benefits }}</td>
+                                <td><span class="badge bg-danger-subtle text-danger">{{ s.deadline or 'Open Year-Round' }}</span></td>
+                                <td class="pe-4 text-end">
+                                    <button class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#editSchemeModal{{ s.id }}">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <a href="{{ url_for('admin.delete_scheme', id=s.id) }}" class="btn btn-sm btn-outline-danger btn-delete-confirm" data-confirm-message="Are you sure you want to remove this scheme listing?">
+                                        <i class="fas fa-trash-alt"></i> Delete
+                                    </a>
+                                </td>
+                            </tr>
+
+                            <!-- Edit Modal -->
+                            <div class="modal fade" id="editSchemeModal{{ s.id }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content card-custom p-3 border-0">
+                                        <div class="modal-header border-0 pb-0">
+                                            <h5 class="modal-title fw-bold text-success">Modify Government Scheme</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form action="{{ url_for('admin.edit_scheme', id=s.id) }}" method="POST">
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label fw-semibold">Scheme Name</label>
+                                                        <input type="text" name="scheme_name" class="form-control" value="{{ s.scheme_name }}" required>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label fw-semibold">Application Deadline</label>
+                                                        <input type="text" name="deadline" class="form-control" value="{{ s.deadline or '' }}">
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label class="form-label fw-semibold">Scheme Description</label>
+                                                        <textarea name="description" class="form-control" rows="3" required>{{ s.description }}</textarea>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label fw-semibold">Benefits</label>
+                                                        <textarea name="benefits" class="form-control" rows="2">{{ s.benefits }}</textarea>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label fw-semibold">Eligibility</label>
+                                                        <textarea name="eligibility" class="form-control" rows="2">{{ s.eligibility }}</textarea>
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label class="form-label fw-semibold">Apply Link</label>
+                                                        <input type="url" name="apply_link" class="form-control" value="{{ s.apply_link or '' }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer border-0 pt-0">
+                                                <button type="button" class="btn btn-secondary-custom" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary-custom">Save Changes</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center py-4 text-muted">No government schemes listed.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

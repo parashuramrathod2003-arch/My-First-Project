@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center my-4">
+    <div class="col-md-8">
+        <div class="card card-custom p-4 shadow">
+            <div class="text-center mb-4">
+                <i class="fas fa-user-plus text-success fs-1 mb-2"></i>
+                <h3 class="fw-bold">Farmer Registration</h3>
+                <p class="text-muted">Create your account to access custom agricultural advisories</p>
+            </div>
+            
+            <form action="{{ url_for('public.register') }}" method="POST" id="registerForm">
+                <h5 class="fw-bold text-success mb-3 border-bottom pb-2">1. Account Credentials</h5>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="username" class="form-label fw-semibold">Username <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="username" name="username" required placeholder="Choose a username">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="email" class="form-label fw-semibold">Email Address <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control" id="email" name="email" required placeholder="farmer@example.com">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="password" class="form-label fw-semibold">Password <span class="text-danger">*</span></label>
+                        <input type="password" class="form-control" id="password" name="password" required placeholder="Min 6 characters">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="confirm_password" class="form-label fw-semibold">Confirm Password <span class="text-danger">*</span></label>
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required placeholder="Retype password">
+                    </div>
+                </div>
+
+                <h5 class="fw-bold text-success mt-4 mb-3 border-bottom pb-2">2. Personal & Farm Information</h5>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="name" class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="name" name="name" required placeholder="Enter your full name">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="phone" class="form-label fw-semibold">Phone Number</label>
+                        <input type="text" class="form-control" id="phone" name="phone" placeholder="10-digit mobile number">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="state" class="form-label fw-semibold">State</label>
+                        <select class="form-select" id="state" name="state">
+                            <option value="">Select State</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="Maharashtra">Maharashtra</option>
+                            <option value="Andhra Pradesh">Andhra Pradesh</option>
+                            <option value="Tamil Nadu">Tamil Nadu</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="district" class="form-label fw-semibold">District</label>
+                        <input type="text" class="form-control" id="district" name="district" placeholder="Enter your district (e.g. Dharwad)">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="soil_type" class="form-label fw-semibold">Soil Type</label>
+                        <select class="form-select" id="soil_type" name="soil_type">
+                            <option value="">Select Soil Type</option>
+                            <option value="Black Soil">Black Soil</option>
+                            <option value="Red Soil">Red Soil</option>
+                            <option value="Clayey Soil">Clayey Soil</option>
+                            <option value="Loamy Soil">Loamy Soil</option>
+                            <option value="Sandy Loam">Sandy Loam</option>
+                            <option value="Alluvial Soil">Alluvial Soil</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="farm_size" class="form-label fw-semibold">Farm Size (in Acres)</label>
+                        <input type="text" class="form-control" id="farm_size" name="farm_size" placeholder="e.g. 5.5">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary-custom w-100 py-2 mt-4 mb-3"><i class="fas fa-user-plus me-2"></i>Complete Registration</button>
+            </form>
+            
+            <div class="text-center">
+                <p class="mb-0 text-muted">Already registered? <a href="{{ url_for('public.login') }}" class="text-success fw-bold text-decoration-none">Log in here</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Hero Banner -->
+<div class="row">
+    <div class="col-12 p-0">
+        <div class="hero-section rounded-4 shadow">
+            <div class="container py-5">
+                <h1 class="hero-title" data-translate="welcome">Smart Agriculture Advisory System</h1>
+                <p class="hero-subtitle">Optimize your farm yield with intelligent crop recommendations, weather forecasting, fertilizer advisory, pest detection guides, and current market updates.</p>
+                <div class="d-flex justify-content-center gap-3">
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('farmer.crop_recommendation') }}" class="btn btn-primary-custom btn-lg"><i class="fas fa-seedling me-2"></i>Get Recommendation</a>
+                        <a href="{{ url_for('farmer.dashboard') }}" class="btn btn-outline-light btn-lg px-4"><i class="fas fa-chart-line me-2"></i>Go to Dashboard</a>
+                    {% else %}
+                        <a href="{{ url_for('public.register') }}" class="btn btn-primary-custom btn-lg"><i class="fas fa-user-plus me-2"></i>Get Started</a>
+                        <a href="{{ url_for('public.login') }}" class="btn btn-outline-light btn-lg px-4"><i class="fas fa-sign-in-alt me-2"></i>Farmer Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="row text-center my-5">
+    <div class="col-12 mb-4">
+        <h2 class="fw-bold" data-translate="features">Features & Modules</h2>
+        <p class="text-muted">A complete ecosystem designed to assist farmers at every stage of the cultivation cycle.</p>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card card-custom h-100 p-4">
+            <div class="feature-icon-box mx-auto">
+                <i class="fas fa-seedling"></i>
+            </div>
+            <h4 class="fw-semibold">Crop Recommendation</h4>
+            <p class="text-muted">Receive soil-specific and seasonal crop recommendations based on location, climate, and water availability to maximize profitability.</p>
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('farmer.crop_recommendation') }}" class="text-success fw-bold text-decoration-none mt-auto">Try Now <i class="fas fa-arrow-right"></i></a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card card-custom h-100 p-4">
+            <div class="feature-icon-box mx-auto">
+                <i class="fas fa-cloud-sun"></i>
+            </div>
+            <h4 class="fw-semibold">Weather Advisory</h4>
+            <p class="text-muted">Stay updated with regional weather forecasts and get customized agricultural recommendations regarding pesticide spraying and irrigation scheduling.</p>
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('farmer.weather_advisory') }}" class="text-success fw-bold text-decoration-none mt-auto">View Forecast <i class="fas fa-arrow-right"></i></a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card card-custom h-100 p-4">
+            <div class="feature-icon-box mx-auto">
+                <i class="fas fa-flask"></i>
+            </div>
+            <h4 class="fw-semibold">Fertilizer Advisor</h4>
+            <p class="text-muted">Calculate optimal fertilizer dosage for crops at specific growth stages to maintain soil health, save costs, and boost overall crop health.</p>
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('farmer.fertilizer_recommendation') }}" class="text-success fw-bold text-decoration-none mt-auto">Calculate Dosage <i class="fas fa-arrow-right"></i></a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Extra services preview banner -->
+<div class="row align-items-center bg-white rounded-4 shadow-sm p-4 p-md-5 my-5 border">
+    <div class="col-lg-6">
+        <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&q=80&w=600" alt="Farmer holding crop" class="img-fluid rounded-4 shadow-sm mb-4 mb-lg-0">
+    </div>
+    <div class="col-lg-6 ps-lg-5">
+        <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill mb-3">Live Pricing & Market Analysis</span>
+        <h2 class="fw-bold mb-3">Check Mandi Market Prices Instantly</h2>
+        <p class="text-muted mb-4">Keep track of daily fluctuating agricultural commodity prices across various markets (APMC Mandis). Filter by crop and market locations and sort prices to sell your harvest at the best price.</p>
+        <div class="row">
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="fas fa-check-circle text-success"></i>
+                    <span>Real-time Market Updates</span>
+                </div>
+            </div>
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="fas fa-check-circle text-success"></i>
+                    <span>Bilingual User Interface</span>
+                </div>
+            </div>
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="fas fa-check-circle text-success"></i>
+                    <span>Pest & Disease Advisory</span>
+                </div>
+            </div>
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="fas fa-check-circle text-success"></i>
+                    <span>Govt Schemes Integration</span>
+                </div>
+            </div>
+        </div>
+        <div class="mt-4">
+            <a href="{{ url_for('public.about') }}" class="btn btn-primary-custom px-4 py-2">Learn More</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

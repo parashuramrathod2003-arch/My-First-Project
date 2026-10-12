@@ -1,0 +1,79 @@
+{% extends 'farmer_base.html' %}
+{% block farmer_content %}
+<div class="row">
+    <div class="col-12 mb-3">
+        <a href="{{ url_for('farmer.pest_disease') }}" class="btn btn-sm btn-secondary-custom mb-3"><i class="fas fa-arrow-left me-2"></i>Back to List</a>
+    </div>
+    
+    <div class="col-12">
+        <div class="card card-custom p-4 border-0 shadow-sm mb-4">
+            <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-3">
+                <div>
+                    <span class="badge {% if is_pest %}bg-success{% else %}bg-danger{% endif %} text-white mb-2">
+                        {% if is_pest %}Pest Advisory{% else %}Disease Advisory{% endif %}
+                    </span>
+                    <h2 class="fw-bold {% if is_pest %}text-success{% else %}text-danger{% endif %} mb-0">{{ item.name }}</h2>
+                    <small class="text-muted"><i class="fas fa-leaf me-1"></i>Target Crop: <strong>{{ item.crop_name }}</strong></small>
+                </div>
+                <div class="fs-1 {% if is_pest %}text-success{% else %}text-danger{% endif %} opacity-25">
+                    {% if is_pest %}<i class="fas fa-bug"></i>{% else %}<i class="fas fa-virus"></i>{% endif %}
+                </div>
+            </div>
+
+            <!-- Content Details -->
+            <div class="row">
+                <div class="col-md-7">
+                    <!-- Symptoms -->
+                    <div class="mb-4">
+                        <h5 class="fw-bold"><i class="fas fa-search-minus me-2 text-warning"></i>Symptoms:</h5>
+                        <p class="text-muted">{{ item.symptoms }}</p>
+                    </div>
+                    
+                    <!-- Causes -->
+                    <div class="mb-4">
+                        <h5 class="fw-bold"><i class="fas fa-question-circle me-2 text-secondary"></i>Causes:</h5>
+                        <p class="text-muted">{{ item.causes }}</p>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <!-- Image Box -->
+                    <div class="bg-light border rounded-4 d-flex align-items-center justify-content-center p-5 text-center mb-4" style="min-height: 250px;">
+                        <div>
+                            <i class="fas fa-camera text-muted fs-1 mb-2"></i>
+                            <p class="mb-0 text-muted small">Advisory Image Not Available</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="row">
+                <!-- Prevention -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 bg-success-subtle border-0 p-3 rounded-4">
+                        <h5 class="fw-bold text-success-emphasis"><i class="fas fa-shield-halved me-2"></i>Prevention & Cultural Control</h5>
+                        <p class="small text-success-emphasis mb-0 mt-2">{{ item.prevention }}</p>
+                    </div>
+                </div>
+                
+                <!-- Treatment -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 bg-warning-subtle border-0 p-3 rounded-4">
+                        <h5 class="fw-bold text-warning-emphasis"><i class="fas fa-hand-holding-medical me-2"></i>Curative Treatment & Control</h5>
+                        <p class="small text-warning-emphasis mb-0 mt-2">{{ item.treatment }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommended Pesticides -->
+            {% if item.recommended_pesticides %}
+            <div class="p-3 bg-light rounded-4 border-start border-4 border-success mt-2">
+                <h6 class="fw-bold mb-1"><i class="fas fa-prescription-bottle-alt me-2 text-success"></i>Recommended Chemical / Organic Control Agents:</h6>
+                <span class="fw-bold fs-6 text-success">{{ item.recommended_pesticides }}</span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

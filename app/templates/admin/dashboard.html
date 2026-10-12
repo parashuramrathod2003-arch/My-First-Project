@@ -1,0 +1,113 @@
+{% extends 'admin_base.html' %}
+{% block admin_content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="fw-bold mb-0 text-success">Admin Dashboard</h2>
+        <p class="text-muted">Overview of the Smart Agriculture Advisory System metrics and activities.</p>
+    </div>
+</div>
+
+<!-- Telemetry Stats Cards -->
+<div class="row mb-4">
+    <!-- Farmers Card -->
+    <div class="col-md-3 col-6 mb-3">
+        <div class="card card-custom p-3 border-0 shadow-sm d-flex flex-row align-items-center justify-content-between">
+            <div>
+                <span class="text-muted small fw-semibold">Total Farmers</span>
+                <h3 class="fw-bold mb-0 mt-1 text-success">{{ farmer_count }}</h3>
+            </div>
+            <div class="fs-2 text-primary opacity-50"><i class="fas fa-users"></i></div>
+        </div>
+    </div>
+    
+    <!-- Crops Card -->
+    <div class="col-md-3 col-6 mb-3">
+        <div class="card card-custom p-3 border-0 shadow-sm d-flex flex-row align-items-center justify-content-between">
+            <div>
+                <span class="text-muted small fw-semibold">Total Crops</span>
+                <h3 class="fw-bold mb-0 mt-1 text-success">{{ crop_count }}</h3>
+            </div>
+            <div class="fs-2 text-success opacity-50"><i class="fas fa-seedling"></i></div>
+        </div>
+    </div>
+
+    <!-- Pests/Diseases Card -->
+    <div class="col-md-3 col-6 mb-3">
+        <div class="card card-custom p-3 border-0 shadow-sm d-flex flex-row align-items-center justify-content-between">
+            <div>
+                <span class="text-muted small fw-semibold">Pests/Diseases</span>
+                <h3 class="fw-bold mb-0 mt-1 text-success">{{ pest_count + disease_count }}</h3>
+            </div>
+            <div class="fs-2 text-danger opacity-50"><i class="fas fa-bug"></i></div>
+        </div>
+    </div>
+
+    <!-- Feedbacks Card -->
+    <div class="col-md-3 col-6 mb-3">
+        <div class="card card-custom p-3 border-0 shadow-sm d-flex flex-row align-items-between justify-content-between">
+            <div>
+                <span class="text-muted small fw-semibold">Feedbacks</span>
+                <h3 class="fw-bold mb-0 mt-1 text-success">{{ feedback_count }}</h3>
+            </div>
+            <div class="fs-2 text-warning opacity-50"><i class="fas fa-comment-dots"></i></div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Recent Registrations -->
+    <div class="col-lg-6 mb-4">
+        <div class="card card-custom p-4 border-0 shadow-sm h-100">
+            <h5 class="fw-bold text-success mb-3"><i class="fas fa-user-plus me-2"></i>Recent Farmers Registered</h5>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>District</th>
+                            <th>Date Joined</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if recent_farmers %}
+                            {% for f in recent_farmers %}
+                            <tr>
+                                <td class="fw-semibold">{{ f.name }}</td>
+                                <td>{{ f.district or 'N/A' }}</td>
+                                <td class="small text-muted">{{ f.created_at.strftime('%d-%b-%Y') }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">No farmers registered yet.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Feedbacks -->
+    <div class="col-lg-6 mb-4">
+        <div class="card card-custom p-4 border-0 shadow-sm h-100">
+            <h5 class="fw-bold text-success mb-3"><i class="fas fa-star me-2"></i>Recent Feedbacks</h5>
+            <div class="d-flex flex-column gap-3">
+                {% if recent_feedbacks %}
+                    {% for f in recent_feedbacks %}
+                    <div class="p-3 bg-light rounded-4">
+                        <div class="d-flex align-items-center justify-content-between mb-1">
+                            <span class="fw-bold small text-success">{{ f.farmer.name if f.farmer else 'Anonymous' }}</span>
+                            <span class="badge {% if f.status == 'Reviewed' %}bg-success-subtle text-success{% else %}bg-warning-subtle text-warning{% endif %}">{{ f.status }}</span>
+                        </div>
+                        <p class="small text-muted mb-0">{{ f.message|truncate(80) }}</p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted text-center py-4 mb-0">No feedbacks received yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

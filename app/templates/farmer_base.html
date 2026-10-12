@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+    <!-- Sidebar Column -->
+    <div class="col-lg-3 col-md-4 mb-4 no-print">
+        <div class="card card-custom p-3 shadow-sm border-0" style="background-color: var(--sidebar-bg);">
+            <div class="text-center py-3 border-bottom border-light border-opacity-25 mb-3">
+                <div class="profile-img-container shadow-sm mb-2" style="width: 80px; height: 80px; border: 3px solid var(--primary-light);">
+                    <img src="{{ url_for('static', filename='uploads/' + (current_user.profile_pic or 'default.jpg')) }}" alt="Profile Pic">
+                </div>
+                <h6 class="fw-bold mb-0 text-white">{{ current_user.name }}</h6>
+                <small class="text-white-50"><i class="fas fa-map-marker-alt me-1"></i>{{ current_user.district or 'No district' }}, {{ current_user.state or '' }}</small>
+            </div>
+            
+            <div class="list-group list-group-flush bg-transparent">
+                <a href="{{ url_for('farmer.dashboard') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'farmer.dashboard' %}active fw-bold bg-success{% endif %}">
+                    <i class="fas fa-tachometer-alt"></i> <span data-translate="dashboard">Dashboard</span>
+                </a>
+                <a href="{{ url_for('farmer.profile') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'farmer.profile' %}active fw-bold bg-success{% endif %}">
+                    <i class="fas fa-user-edit"></i> <span data-translate="profile">My Profile</span>
+                </a>
+                <a href="{{ url_for('farmer.crop_recommendation') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'farmer.crop_recommendation' %}active fw-bold bg-success{% endif %}">
+                    <i class="fas fa-seedling"></i> <span data-translate="crop_recommendation">Crop Recs</span>
+                </a>
+                <a href="{{ url_for('farmer.weather_advisory') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'farmer.weather_advisory' %}active fw-bold bg-success{% endif %}">
+                    <i class="fas fa-cloud-sun"></i> <span data-translate="weather_advisory">Weather</span>
+                </a>
+                <a href="{{ url_for('farmer.fertilizer_recommendation') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'farmer.fertilizer_recommendation' %}active fw-bold bg-success{% endif %}">
+                    <i class="fas fa-flask"></i> <span data-translate="fertilizer_recommendation">Fertilizers</span>
+                </a>
+                <a href="{{ url_for('farmer.pest_disease') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if 'pest_disease' in request.endpoint %}active fw-bold bg-success{% endif %}">
+                    <i class="fas fa-bug"></i> <span data-translate="pest_disease">Pests/Diseases</span>
+                </a>
+                <a href="{{ url_for('farmer.irrigation_advisory') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'farmer.irrigation_advisory' %}active fw-bold bg-success{% endif %}">
+                    <i class="fas fa-faucet-drip"></i> <span data-translate="irrigation_advisory">Irrigation</span>
+                </a>
+                <a href="{{ url_for('farmer.market_prices') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'farmer.market_prices' %}active fw-bold bg-success{% endif %}">
+                    <i class="fas fa-coins"></i> <span data-translate="market_prices">Mandi Prices</span>
+                </a>
+                <a href="{{ url_for('farmer.agricultural_news') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'farmer.agricultural_news' %}active fw-bold bg-success{% endif %}">
+                    <i class="fas fa-newspaper"></i> <span data-translate="agricultural_news">News</span>
+                </a>
+                <a href="{{ url_for('farmer.government_schemes') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'farmer.government_schemes' %}active fw-bold bg-success{% endif %}">
+                    <i class="fas fa-hand-holding-usd"></i> <span data-translate="government_schemes">Gov Schemes</span>
+                </a>
+                <a href="{{ url_for('farmer.feedback') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'farmer.feedback' %}active fw-bold bg-success{% endif %}">
+                    <i class="fas fa-comment-dots"></i> <span data-translate="feedback">Feedback</span>
+                </a>
+                <a href="{{ url_for('farmer.settings') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'farmer.settings' %}active fw-bold bg-success{% endif %}">
+                    <i class="fas fa-cog"></i> <span data-translate="settings">Settings</span>
+                </a>
+                <a href="{{ url_for('public.logout') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3">
+                    <i class="fas fa-sign-out-alt"></i> <span data-translate="logout">Logout</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content Column -->
+    <div class="col-lg-9 col-md-8">
+        {% block farmer_content %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

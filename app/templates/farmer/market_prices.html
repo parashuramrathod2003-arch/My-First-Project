@@ -1,0 +1,110 @@
+{% extends 'farmer_base.html' %}
+{% block farmer_content %}
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="card card-custom p-4 border-0 shadow-sm">
+            <h4 class="fw-bold text-success mb-2" data-translate="market_update"><i class="fas fa-coins me-2"></i>Mandi Market Prices</h4>
+            <p class="text-muted">Stay informed about daily fluctuating crop commodity prices across APMC markets. Use filters to compare rates and find the best place to sell your yield.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Controls Panel -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card card-custom p-3 border-0 shadow-sm">
+            <div class="row g-2 align-items-center">
+                <!-- Search -->
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="fas fa-search"></i></span>
+                        <input type="text" id="marketSearch" class="form-control border-start-0 py-2" placeholder="Search crops or markets...">
+                    </div>
+                </div>
+                
+                <!-- Crop Filter -->
+                <div class="col-md-3">
+                    <select id="cropFilter" class="form-select py-2">
+                        <option value="">All Crops</option>
+                        {% for crop in crops %}
+                        <option value="{{ crop }}">{{ crop }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Market Filter -->
+                <div class="col-md-3">
+                    <select id="marketFilter" class="form-select py-2">
+                        <option value="">All Markets</option>
+                        {% for market in markets %}
+                        <option value="{{ market }}">{{ market }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Sort Price button -->
+                <div class="col-md-2">
+                    <button id="sortPrice" class="btn btn-outline-success w-100 py-2 fw-semibold">
+                        <i class="fas fa-sort-amount-down-alt me-2"></i>Sort Price
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Prices Table -->
+<div class="row">
+    <div class="col-12">
+        <div class="card card-custom border-0 shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">Crop Name</th>
+                            <th>Market Name</th>
+                            <th>Current Price (per Quintal)</th>
+                            <th>Previous Price</th>
+                            <th>Price Trend</th>
+                            <th class="pe-4">Last Updated</th>
+                        </tr>
+                    </thead>
+                    <tbody id="marketTableBody">
+                        {% if prices %}
+                            {% for p in prices %}
+                            <tr data-crop="{{ p.crop_name }}" data-market="{{ p.market_name }}" data-price="{{ p.current_price }}">
+                                <td class="ps-4 fw-bold text-success">{{ p.crop_name }}</td>
+                                <td><i class="fas fa-map-marker-alt text-muted me-1"></i>{{ p.market_name }}</td>
+                                <td class="fw-bold">₹{{ p.current_price }}</td>
+                                <td class="text-muted">₹{{ p.previous_price or 'N/A' }}</td>
+                                <td>
+                                    {% if p.previous_price %}
+                                        {% if p.current_price > p.previous_price %}
+                                            <span class="text-success fw-bold"><i class="fas fa-arrow-trend-up me-1"></i>+₹{{ (p.current_price - p.previous_price)|round(2) }}</span>
+                                        {% elif p.current_price < p.previous_price %}
+                                            <span class="text-danger fw-bold"><i class="fas fa-arrow-trend-down me-1"></i>-₹{{ (p.previous_price - p.current_price)|round(2) }}</span>
+                                        {% else %}
+                                            <span class="text-secondary"><i class="fas fa-arrows-left-right me-1"></i>No Change</span>
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="text-muted">New Entry</span>
+                                    {%     endif %}
+                                </td>
+                                <td class="pe-4 text-muted small">{{ p.updated_at.strftime('%d-%b-%Y %H:%M') }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center py-4 text-muted">No market prices available.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Inject Farmer actions script -->
+<script src="{{ url_for('static', filename='js/farmer.js') }}"></script>
+{% endblock %}

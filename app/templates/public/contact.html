@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row my-4">
+    <div class="col-12 text-center mb-5">
+        <h1 class="fw-bold">Contact Us</h1>
+        <p class="text-muted">Have any queries or need specialized assistance? Drop us a message, and we'll reply shortly.</p>
+    </div>
+</div>
+
+<div class="row mb-5">
+    <!-- Contact Details & Map -->
+    <div class="col-lg-5 mb-4 mb-lg-0">
+        <div class="card card-custom p-4 h-100">
+            <h4 class="fw-bold text-success mb-4">Get in Touch</h4>
+            <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="text-success fs-5"><i class="fas fa-map-marker-alt"></i></div>
+                <div>
+                    <h6 class="fw-bold mb-0">Our Office Address</h6>
+                    <p class="text-muted mb-0">Smart Agriculture Advisory Board, APMC Road, Dharwad, Karnataka - 580001</p>
+                </div>
+            </div>
+            <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="text-success fs-5"><i class="fas fa-phone-alt"></i></div>
+                <div>
+                    <h6 class="fw-bold mb-0">Phone Number</h6>
+                    <p class="text-muted mb-0">+91 98765 43210 / 0836-2443322</p>
+                </div>
+            </div>
+            <div class="d-flex align-items-start gap-3 mb-4">
+                <div class="text-success fs-5"><i class="fas fa-envelope"></i></div>
+                <div>
+                    <h6 class="fw-bold mb-0">Email Address</h6>
+                    <p class="text-muted mb-0">support@smartagri.com / contact@smartagri.com</p>
+                </div>
+            </div>
+            
+            <!-- Map Placeholder -->
+            <div class="flex-grow-1 bg-light rounded-4 d-flex align-items-center justify-content-center p-5 border text-center" style="min-height: 200px;">
+                <div>
+                    <i class="fas fa-map-marked-alt text-success fs-1 mb-2"></i>
+                    <p class="mb-0 fw-semibold">Interactive Google Map Placeholder</p>
+                    <p class="text-muted small">APMC Road Dharwad Hubli Karnataka</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Contact Form -->
+    <div class="col-lg-7">
+        <div class="card card-custom p-4">
+            <h4 class="fw-bold text-success mb-4">Send Message</h4>
+            <form action="{{ url_for('public.contact') }}" method="POST" id="contactForm" class="needs-validation" novalidate>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="name" class="form-label fw-semibold">Your Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control py-2" id="name" name="name" required placeholder="Enter your name">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="email" class="form-label fw-semibold">Your Email <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control py-2" id="email" name="email" required placeholder="name@example.com">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="subject" class="form-label fw-semibold">Subject</label>
+                    <input type="text" class="form-control py-2" id="subject" name="subject" placeholder="What is this about?">
+                </div>
+                <div class="mb-4">
+                    <label for="message" class="form-label fw-semibold">Message <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="message" name="message" rows="5" required placeholder="Write your message details..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary-custom w-100 py-2"><i class="fas fa-paper-plane me-2"></i>Submit Inquiry</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

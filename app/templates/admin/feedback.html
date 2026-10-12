@@ -1,0 +1,74 @@
+{% extends 'admin_base.html' %}
+{% block admin_content %}
+<div class="row">
+    <div class="col-12 mb-4">
+        <h2 class="fw-bold mb-0 text-success">Farmer Feedback</h2>
+        <p class="text-muted">Review star ratings and suggestions submitted by logged-in farmers.</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card card-custom border-0 shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">ID</th>
+                            <th>Farmer Name</th>
+                            <th>Rating</th>
+                            <th>Review Message</th>
+                            <th>Date Submitted</th>
+                            <th>Status</th>
+                            <th class="pe-4 text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if feedbacks %}
+                            {% for f in feedbacks %}
+                            <tr>
+                                <td class="ps-4 text-muted">{{ f.id }}</td>
+                                <td class="fw-bold">{{ f.farmer.name if f.farmer else 'Anonymous' }}</td>
+                                <td>
+                                    <div class="rating-stars">
+                                        {% for i in range(f.rating) %}
+                                        <i class="fas fa-star text-warning"></i>
+                                        {% endfor %}
+                                        {% for i in range(5 - f.rating) %}
+                                        <i class="far fa-star text-muted"></i>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                                <td class="small text-muted">{{ f.message }}</td>
+                                <td>{{ f.submitted_at.strftime('%d-%b-%Y %H:%M') }}</td>
+                                <td>
+                                    <span class="badge {% if f.status == 'Reviewed' %}bg-success-subtle text-success{% else %}bg-warning-subtle text-warning{% endif %}">
+                                        {{ f.status }}
+                                    </span>
+                                </td>
+                                <td class="pe-4 text-end">
+                                    {% if f.status == 'Pending' %}
+                                    <a href="{{ url_for('admin.review_feedback', id=f.id) }}" class="btn btn-sm btn-outline-success me-2">
+                                        <i class="fas fa-check"></i> Mark Reviewed
+                                    </a>
+                                    {% endif %}
+                                    <a href="{{ url_for('admin.delete_feedback', id=f.id) }}" class="btn btn-sm btn-outline-danger btn-delete-confirm" data-confirm-message="Are you sure you want to delete this feedback review?">
+                                        <i class="fas fa-trash-alt"></i> Remove
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="7" class="text-center py-4 text-muted">No feedbacks have been received yet.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

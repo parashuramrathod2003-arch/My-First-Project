@@ -1,0 +1,377 @@
+/* Smart Agriculture Advisory System - Theme Stylesheet */
+
+:root {
+    --primary-color: #2e7d32;
+    --primary-dark: #1b5e20;
+    --primary-light: #81c784;
+    --accent-color: #4caf50;
+    --accent-light: #e8f5e9;
+    --body-bg: #f4f6f9;
+    --card-bg: #ffffff;
+    --text-color: #2c3e50;
+    --text-muted: #6c757d;
+    --border-color: #dee2e6;
+    --sidebar-bg: #1e4620;
+    --sidebar-text: #ffffff;
+    --sidebar-hover: #2e7d32;
+    --sidebar-active: #388e3c;
+    --header-bg: #ffffff;
+    --footer-bg: #1b5e20;
+    --footer-text: #e8f5e9;
+}
+
+body.dark-mode {
+    --primary-color: #4caf50;
+    --primary-dark: #2e7d32;
+    --primary-light: #81c784;
+    --accent-color: #81c784;
+    --accent-light: #1b3d1e;
+    --body-bg: #121212;
+    --card-bg: #1e1e1e;
+    --text-color: #e0e0e0;
+    --text-muted: #a0a0a0;
+    --border-color: #333333;
+    --sidebar-bg: #121212;
+    --sidebar-text: #e0e0e0;
+    --sidebar-hover: #1e4620;
+    --sidebar-active: #2e7d32;
+    --header-bg: #1e1e1e;
+    --footer-bg: #0c2b0e;
+    --footer-text: #a5d6a7;
+}
+
+body {
+    background-color: var(--body-bg);
+    color: var(--text-color);
+    font-family: 'Outfit', sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+}
+
+/* Custom Sticky Navbar */
+.navbar-custom {
+    background-color: var(--header-bg);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.8rem 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+.navbar-custom .navbar-brand {
+    font-weight: 700;
+    color: var(--primary-color) !important;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.navbar-custom .nav-link {
+    color: var(--text-color);
+    font-weight: 500;
+    margin: 0 0.5rem;
+    border-radius: 5px;
+    padding: 0.5rem 1rem !important;
+    transition: all 0.2s ease;
+}
+.navbar-custom .nav-link:hover, 
+.navbar-custom .nav-link.active {
+    color: var(--primary-color) !important;
+    background-color: var(--accent-light);
+}
+
+/* Theme buttons */
+.btn-primary-custom {
+    background-color: var(--primary-color);
+    color: white !important;
+    border: none;
+    font-weight: 500;
+    border-radius: 8px;
+    padding: 0.6rem 1.5rem;
+    transition: all 0.3s ease;
+}
+.btn-primary-custom:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(46, 125, 50, 0.2);
+}
+
+.btn-secondary-custom {
+    background-color: var(--accent-light);
+    color: var(--primary-color) !important;
+    border: 1px solid var(--primary-light);
+    font-weight: 500;
+    border-radius: 8px;
+    padding: 0.6rem 1.5rem;
+    transition: all 0.3s ease;
+}
+.btn-secondary-custom:hover {
+    background-color: var(--primary-light);
+    color: white !important;
+    transform: translateY(-2px);
+}
+
+/* Rounded Shadow Cards with Hover Effect */
+.card-custom {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    overflow: hidden;
+}
+.card-custom:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(46, 125, 50, 0.08);
+    border-color: var(--primary-light);
+}
+.card-header-custom {
+    background-color: transparent;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.25rem 1.5rem;
+    font-weight: 600;
+}
+
+/* Dashboard Sidebar Layout */
+.dashboard-container {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+}
+.sidebar {
+    width: 260px;
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    padding: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+}
+.sidebar-header {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 1.5rem;
+}
+.sidebar-logo {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+    overflow-y: auto;
+}
+.sidebar-item {
+    margin: 0.2rem 1rem;
+}
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+.sidebar-link i {
+    width: 20px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+.sidebar-link:hover {
+    background-color: var(--sidebar-hover);
+    color: #ffffff;
+}
+.sidebar-link.active {
+    background-color: var(--sidebar-active);
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.dashboard-content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+    background-color: var(--body-bg);
+}
+
+/* User & Profile Header */
+.profile-img-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 1.5rem auto;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid var(--primary-light);
+}
+.profile-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Dark mode inputs and tables */
+body.dark-mode .form-control,
+body.dark-mode .form-select {
+    background-color: #2b2b2b;
+    border-color: #444444;
+    color: #e0e0e0;
+}
+body.dark-mode .form-control:focus,
+body.dark-mode .form-select:focus {
+    background-color: #333333;
+    border-color: var(--primary-color);
+}
+body.dark-mode .table {
+    color: #e0e0e0;
+}
+body.dark-mode .table-hover tbody tr:hover {
+    background-color: #252525;
+}
+
+/* Landing Page Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, rgba(27, 94, 32, 0.9), rgba(46, 125, 50, 0.75)), url('/app/static/uploads/hero_farm.jpg');
+    background-size: cover;
+    background-position: center;
+    padding: 8rem 0;
+    color: white;
+    text-align: center;
+    position: relative;
+    margin-bottom: 3rem;
+}
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    animation: fadeInUp 0.8s ease;
+}
+.hero-subtitle {
+    font-size: 1.25rem;
+    font-weight: 300;
+    margin-bottom: 2.5rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    color: var(--accent-light);
+}
+
+/* Features Grid */
+.feature-icon-box {
+    width: 60px;
+    height: 60px;
+    background-color: var(--accent-light);
+    color: var(--primary-color);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+body.dark-mode .feature-icon-box {
+    background-color: var(--accent-light);
+    color: var(--primary-light);
+}
+
+/* Interactive Elements */
+.rating-stars {
+    display: flex;
+    gap: 0.25rem;
+    color: #ffc107;
+    font-size: 1.2rem;
+}
+
+/* Sticky Footer */
+.footer-custom {
+    background-color: var(--footer-bg);
+    color: var(--footer-text);
+    padding: 3rem 0 1.5rem 0;
+    margin-top: auto;
+    border-top: 4px solid var(--primary-light);
+}
+.footer-custom a {
+    color: var(--footer-text);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+.footer-custom a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+/* CSS Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Print Stylesheet overrides */
+@media print {
+    .sidebar, .navbar, .btn, .no-print, footer, .floating-button {
+        display: none !important;
+    }
+    .dashboard-content, .container, body {
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        background-color: white !important;
+        color: black !important;
+    }
+    .card-custom {
+        box-shadow: none !important;
+        border: 1px solid #000 !important;
+        break-inside: avoid;
+    }
+}
+
+/* Collapsible responsive sidebar behaviour */
+@media (max-width: 991.98px) {
+    .dashboard-container {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+        padding: 1rem 0;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .sidebar-header {
+        display: none;
+    }
+    .sidebar-menu {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .sidebar-item {
+        margin: 0.2rem 0.5rem;
+    }
+    .sidebar-link {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.9rem;
+    }
+    .dashboard-content {
+        padding: 1.5rem;
+    }
+}

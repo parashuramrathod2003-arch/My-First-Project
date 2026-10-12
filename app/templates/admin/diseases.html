@@ -1,0 +1,156 @@
+{% extends 'admin_base.html' %}
+{% block admin_content %}
+<div class="row">
+    <!-- Header -->
+    <div class="col-12 d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-0 text-success">Manage Diseases</h2>
+            <p class="text-muted">Register, edit, or delete common crop diseases, diagnostics, and remedies.</p>
+        </div>
+        <button class="btn btn-primary-custom" data-bs-toggle="collapse" data-bs-target="#addDiseaseCollapse">
+            <i class="fas fa-plus me-2"></i>Add Disease Details
+        </button>
+    </div>
+
+    <!-- Collapse Add Disease -->
+    <div class="col-12 mb-4 collapse" id="addDiseaseCollapse">
+        <div class="card card-custom p-4 border-0 shadow-sm">
+            <h5 class="fw-bold text-success mb-3">Add Disease Entry</h5>
+            <form action="{{ url_for('admin.manage_diseases') }}" method="POST">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Disease Name *</label>
+                        <input type="text" name="name" class="form-control" required placeholder="e.g. Rice Blast">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Target Crop Name *</label>
+                        <select name="crop_name" class="form-select" required>
+                            {% for c in crops %}
+                            <option value="{{ c.name }}">{{ c.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Symptoms</label>
+                        <textarea name="symptoms" class="form-control" rows="2" placeholder="Describe symptoms..."></textarea>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Causes</label>
+                        <textarea name="causes" class="form-control" rows="2" placeholder="Describe biological agents or climate causes..."></textarea>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Prevention</label>
+                        <textarea name="prevention" class="form-control" rows="2" placeholder="Describe preventative actions..."></textarea>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Treatment</label>
+                        <textarea name="treatment" class="form-control" rows="2" placeholder="Describe treatment sprays..."></textarea>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label fw-semibold">Recommended Pesticides / Fungicides</label>
+                        <input type="text" name="recommended_pesticides" class="form-control" placeholder="e.g. Tricyclazole 75% WP">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success px-4 py-2">Create Disease Entry</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="col-12">
+        <div class="card card-custom border-0 shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">ID</th>
+                            <th>Disease Name</th>
+                            <th>Target Crop</th>
+                            <th>Symptoms</th>
+                            <th>Recommended Control Agents</th>
+                            <th class="pe-4 text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if diseases %}
+                            {% for d in diseases %}
+                            <tr>
+                                <td class="ps-4 text-muted">{{ d.id }}</td>
+                                <td class="fw-bold text-success">{{ d.name }}</td>
+                                <td>{{ d.crop_name }}</td>
+                                <td class="small text-truncate-3" style="max-width: 250px;">{{ d.symptoms }}</td>
+                                <td class="fw-semibold text-success">{{ d.recommended_pesticides or '-' }}</td>
+                                <td class="pe-4 text-end">
+                                    <button class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#editDiseaseModal{{ d.id }}">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <a href="{{ url_for('admin.delete_disease', id=d.id) }}" class="btn btn-sm btn-outline-danger btn-delete-confirm" data-confirm-message="Are you sure you want to remove this disease entry?">
+                                        <i class="fas fa-trash-alt"></i> Delete
+                                    </a>
+                                </td>
+                            </tr>
+
+                            <!-- Edit Modal -->
+                            <div class="modal fade" id="editDiseaseModal{{ d.id }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content card-custom p-3 border-0">
+                                        <div class="modal-header border-0 pb-0">
+                                            <h5 class="modal-title fw-bold text-success">Modify Disease Entry</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form action="{{ url_for('admin.edit_disease', id=d.id) }}" method="POST">
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label fw-semibold">Disease Name</label>
+                                                        <input type="text" name="name" class="form-control" value="{{ d.name }}" required>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label fw-semibold">Target Crop Name</label>
+                                                        <input type="text" name="crop_name" class="form-control" value="{{ d.crop_name }}" required>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label fw-semibold">Symptoms</label>
+                                                        <textarea name="symptoms" class="form-control" rows="2">{{ d.symptoms }}</textarea>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label fw-semibold">Causes</label>
+                                                        <textarea name="causes" class="form-control" rows="2">{{ d.causes }}</textarea>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label fw-semibold">Prevention</label>
+                                                        <textarea name="prevention" class="form-control" rows="2">{{ d.prevention }}</textarea>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label fw-semibold">Treatment</label>
+                                                        <textarea name="treatment" class="form-control" rows="2">{{ d.treatment }}</textarea>
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label class="form-label fw-semibold">Recommended Control Agents</label>
+                                                        <input type="text" name="recommended_pesticides" class="form-control" value="{{ d.recommended_pesticides or '' }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer border-0 pt-0">
+                                                <button type="button" class="btn btn-secondary-custom" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary-custom">Save Changes</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center py-4 text-muted">No disease details configured.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

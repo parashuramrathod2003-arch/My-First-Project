@@ -1,0 +1,68 @@
+{% extends 'farmer_base.html' %}
+{% block farmer_content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card card-custom p-4 shadow-sm border-0">
+            <h4 class="fw-bold text-success mb-4"><i class="fas fa-user-edit me-2"></i>Edit Profile Details</h4>
+            
+            <form action="{{ url_for('farmer.profile') }}" method="POST" id="profileForm" enctype="multipart/form-data">
+                <div class="row align-items-center mb-4">
+                    <div class="col-md-3 text-center">
+                        <div class="profile-img-container shadow-sm border-3 border border-success" style="width: 130px; height: 130px;">
+                            <img src="{{ url_for('static', filename='uploads/' + (current_user.profile_pic or 'default.jpg')) }}" alt="Farmer Profile Pic">
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <label for="profile_pic" class="form-label fw-bold">Upload New Profile Picture</label>
+                        <input type="file" class="form-control" id="profile_pic" name="profile_pic" accept="image/*">
+                        <small class="text-muted">Allowed formats: PNG, JPG, JPEG, GIF. Maximum file size: 16MB.</small>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="name" class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control py-2" id="name" name="name" value="{{ current_user.name }}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="phone" class="form-label fw-semibold">Phone Number</label>
+                        <input type="text" class="form-control py-2" id="phone" name="phone" value="{{ current_user.phone or '' }}" placeholder="Enter 10 digit number">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="state" class="form-label fw-semibold">State</label>
+                        <select class="form-select py-2" id="state" name="state">
+                            <option value="">Select State</option>
+                            <option value="Karnataka" {% if current_user.state == 'Karnataka' %}selected{% endif %}>Karnataka</option>
+                            <option value="Maharashtra" {% if current_user.state == 'Maharashtra' %}selected{% endif %}>Maharashtra</option>
+                            <option value="Andhra Pradesh" {% if current_user.state == 'Andhra Pradesh' %}selected{% endif %}>Andhra Pradesh</option>
+                            <option value="Tamil Nadu" {% if current_user.state == 'Tamil Nadu' %}selected{% endif %}>Tamil Nadu</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="district" class="form-label fw-semibold">District</label>
+                        <input type="text" class="form-control py-2" id="district" name="district" value="{{ current_user.district or '' }}" placeholder="Enter your district">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="soil_type" class="form-label fw-semibold">Soil Type</label>
+                        <select class="form-select py-2" id="soil_type" name="soil_type">
+                            <option value="">Select Soil Type</option>
+                            <option value="Black Soil" {% if current_user.soil_type == 'Black Soil' %}selected{% endif %}>Black Soil</option>
+                            <option value="Red Soil" {% if current_user.soil_type == 'Red Soil' %}selected{% endif %}>Red Soil</option>
+                            <option value="Clayey Soil" {% if current_user.soil_type == 'Clayey Soil' %}selected{% endif %}>Clayey Soil</option>
+                            <option value="Loamy Soil" {% if current_user.soil_type == 'Loamy Soil' %}selected{% endif %}>Loamy Soil</option>
+                            <option value="Sandy Loam" {% if current_user.soil_type == 'Sandy Loam' %}selected{% endif %}>Sandy Loam</option>
+                            <option value="Alluvial Soil" {% if current_user.soil_type == 'Alluvial Soil' %}selected{% endif %}>Alluvial Soil</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="farm_size" class="form-label fw-semibold">Farm Size (in Acres)</label>
+                        <input type="text" class="form-control py-2" id="farm_size" name="farm_size" value="{{ current_user.farm_size or '' }}" placeholder="e.g. 5.5">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary-custom w-100 py-2 mt-3"><i class="fas fa-save me-2"></i>Save Profile Settings</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

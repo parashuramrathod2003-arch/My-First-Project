@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+    <!-- Sidebar Column -->
+    <div class="col-lg-3 col-md-4 mb-4 no-print">
+        <div class="card card-custom p-3 shadow-sm border-0 bg-dark text-white">
+            <div class="text-center py-3 border-bottom border-secondary mb-3">
+                <div class="fs-1 text-danger mb-2"><i class="fas fa-user-shield"></i></div>
+                <h6 class="fw-bold mb-0 text-white">Admin Control Panel</h6>
+                <small class="text-danger-emphasis fw-semibold">Administrator</small>
+            </div>
+            
+            <div class="list-group list-group-flush bg-transparent">
+                <a href="{{ url_for('admin.dashboard') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'admin.dashboard' %}active bg-danger fw-bold{% endif %}">
+                    <i class="fas fa-chart-pie"></i> <span>Dashboard</span>
+                </a>
+                <a href="{{ url_for('admin.manage_users') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'admin.manage_users' %}active bg-danger fw-bold{% endif %}">
+                    <i class="fas fa-users"></i> <span>Farmers</span>
+                </a>
+                <a href="{{ url_for('admin.manage_crops') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'admin.manage_crops' %}active bg-danger fw-bold{% endif %}">
+                    <i class="fas fa-seedling"></i> <span>Crops (CRUD)</span>
+                </a>
+                <a href="{{ url_for('admin.manage_fertilizers') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'admin.manage_fertilizers' %}active bg-danger fw-bold{% endif %}">
+                    <i class="fas fa-flask"></i> <span>Fertilizers</span>
+                </a>
+                <a href="{{ url_for('admin.manage_weather') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'admin.manage_weather' %}active bg-danger fw-bold{% endif %}">
+                    <i class="fas fa-cloud-sun"></i> <span>Weather Tips</span>
+                </a>
+                <a href="{{ url_for('admin.manage_pests') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'admin.manage_pests' %}active bg-danger fw-bold{% endif %}">
+                    <i class="fas fa-bug"></i> <span>Pests CRUD</span>
+                </a>
+                <a href="{{ url_for('admin.manage_diseases') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'admin.manage_diseases' %}active bg-danger fw-bold{% endif %}">
+                    <i class="fas fa-virus"></i> <span>Diseases CRUD</span>
+                </a>
+                <a href="{{ url_for('admin.manage_irrigation') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'admin.manage_irrigation' %}active bg-danger fw-bold{% endif %}">
+                    <i class="fas fa-faucet-drip"></i> <span>Irrigation Guides</span>
+                </a>
+                <a href="{{ url_for('admin.manage_market_prices') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'admin.manage_market_prices' %}active bg-danger fw-bold{% endif %}">
+                    <i class="fas fa-coins"></i> <span>Mandi Prices</span>
+                </a>
+                <a href="{{ url_for('admin.manage_news') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'admin.manage_news' %}active bg-danger fw-bold{% endif %}">
+                    <i class="fas fa-newspaper"></i> <span>News CRUD</span>
+                </a>
+                <a href="{{ url_for('admin.manage_schemes') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'admin.manage_schemes' %}active bg-danger fw-bold{% endif %}">
+                    <i class="fas fa-hand-holding-usd"></i> <span>Govt Schemes</span>
+                </a>
+                <a href="{{ url_for('admin.view_feedback') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'admin.view_feedback' %}active bg-danger fw-bold{% endif %}">
+                    <i class="fas fa-comment-dots"></i> <span>Farmers Feedback</span>
+                </a>
+                <a href="{{ url_for('admin.contact_messages') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'admin.contact_messages' %}active bg-danger fw-bold{% endif %}">
+                    <i class="fas fa-envelope-open-text"></i> <span>Contact Messages</span>
+                </a>
+                <a href="{{ url_for('admin.reports') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'admin.reports' %}active bg-danger fw-bold{% endif %}">
+                    <i class="fas fa-file-alt"></i> <span>System Reports</span>
+                </a>
+                <a href="{{ url_for('admin.settings') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3 {% if request.endpoint == 'admin.settings' %}active bg-danger fw-bold{% endif %}">
+                    <i class="fas fa-cog"></i> <span>Admin Settings</span>
+                </a>
+                <a href="{{ url_for('public.logout') }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 py-2 d-flex align-items-center gap-3">
+                    <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content Column -->
+    <div class="col-lg-9 col-md-8">
+        {% block admin_content %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

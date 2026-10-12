@@ -1,0 +1,56 @@
+{% extends 'admin_base.html' %}
+{% block admin_content %}
+<div class="row">
+    <div class="col-12 mb-4">
+        <h2 class="fw-bold mb-0 text-success">Contact Inquiries</h2>
+        <p class="text-muted">Review support requests submitted by visitors via the public contact form.</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card card-custom border-0 shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">ID</th>
+                            <th>Sender</th>
+                            <th>Email Address</th>
+                            <th>Subject</th>
+                            <th>Message</th>
+                            <th>Date Received</th>
+                            <th class="pe-4 text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if messages %}
+                            {% for m in messages %}
+                            <tr>
+                                <td class="ps-4 text-muted">{{ m.id }}</td>
+                                <td class="fw-bold">{{ m.name }}</td>
+                                <td>{{ m.email }}</td>
+                                <td>{{ m.subject or 'No Subject' }}</td>
+                                <td class="small text-muted" style="max-width: 250px;">{{ m.message }}</td>
+                                <td>{{ m.submitted_at.strftime('%d-%b-%Y %H:%M') }}</td>
+                                <td class="pe-4 text-end">
+                                    <a href="{{ url_for('admin.delete_contact_message', id=m.id) }}" class="btn btn-sm btn-outline-danger btn-delete-confirm" data-confirm-message="Are you sure you want to delete this inquiry message?">
+                                        <i class="fas fa-trash-alt"></i> Delete
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="7" class="text-center py-4 text-muted">No contact messages received.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

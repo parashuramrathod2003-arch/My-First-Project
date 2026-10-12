@@ -1,0 +1,131 @@
+{% extends 'farmer_base.html' %}
+{% block farmer_content %}
+<div class="row">
+    <!-- Main Weather Header Card -->
+    <div class="col-12 mb-4">
+        <div class="card card-custom p-4 border-0 shadow-sm text-white" style="background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h5 class="text-white-50 mb-1"><i class="fas fa-map-marker-alt me-2"></i>{{ current_user.district or 'Dharwad' }}, {{ current_user.state or 'Karnataka' }}</h5>
+                    <h1 class="fw-bold mb-0">Current Weather advisory</h1>
+                    <p class="text-white-50 mb-0">Seasonal weather updates for optimized farm management</p>
+                </div>
+                <div class="col-md-4 text-md-end mt-3 mt-md-0 d-flex align-items-center gap-3 justify-content-md-end">
+                    <span class="fs-1"><i class="fas fa-sun text-warning"></i></span>
+                    <div>
+                        <h2 class="fw-bold mb-0">28°C</h2>
+                        <small class="text-white-50">Clear Skies</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Weather Telemetry Grid -->
+    <div class="col-12 mb-4">
+        <div class="row g-3">
+            <div class="col-sm-3 col-6">
+                <div class="card card-custom p-3 text-center border-0 shadow-sm h-100">
+                    <i class="fas fa-temperature-high text-danger fs-3 mb-2"></i>
+                    <small class="text-muted d-block">Max Temp</small>
+                    <span class="fw-bold fs-5 text-success">32°C</span>
+                </div>
+            </div>
+            <div class="col-sm-3 col-6">
+                <div class="card card-custom p-3 text-center border-0 shadow-sm h-100">
+                    <i class="fas fa-tint text-primary fs-3 mb-2"></i>
+                    <small class="text-muted d-block">Humidity</small>
+                    <span class="fw-bold fs-5 text-success">65%</span>
+                </div>
+            </div>
+            <div class="col-sm-3 col-6">
+                <div class="card card-custom p-3 text-center border-0 shadow-sm h-100">
+                    <i class="fas fa-wind text-secondary fs-3 mb-2"></i>
+                    <small class="text-muted d-block">Wind Speed</small>
+                    <span class="fw-bold fs-5 text-success">12 km/h</span>
+                </div>
+            </div>
+            <div class="col-sm-3 col-6">
+                <div class="card card-custom p-3 text-center border-0 shadow-sm h-100">
+                    <i class="fas fa-umbrella text-info fs-3 mb-2"></i>
+                    <small class="text-muted d-block">Rain Probability</small>
+                    <span class="fw-bold fs-5 text-success">15%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3-Day Forecast Cards -->
+    <div class="col-md-6 mb-4">
+        <div class="card card-custom p-4 border-0 shadow-sm h-100">
+            <h5 class="fw-bold text-success mb-3"><i class="fas fa-calendar-alt me-2"></i>3-Day Weather Forecast</h5>
+            <div class="d-flex flex-column gap-3">
+                {% for f in forecasts %}
+                <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded-3">
+                    <div class="fw-semibold">{{ f.day }}</div>
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fas {{ f.icon }} fs-5"></i>
+                        <span>{{ f.condition }}</span>
+                    </div>
+                    <div class="text-success fw-bold">{{ f.temp }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Weather Advisory Recommendations Card -->
+    <div class="col-md-6 mb-4">
+        <div class="card card-custom p-4 border-0 shadow-sm h-100">
+            <h5 class="fw-bold text-success mb-3"><i class="fas fa-lightbulb me-2"></i>Agronomic Weather Guidelines</h5>
+            
+            <div class="accordion" id="advisoryAccordion">
+                {% if sunny_adv %}
+                <div class="accordion-item bg-transparent border-0 mb-2">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button bg-light text-success fw-bold rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#sunnyCollapse">
+                            <i class="fas fa-sun me-2 text-warning"></i>Sunny Conditions Advice
+                        </button>
+                    </h2>
+                    <div id="sunnyCollapse" class="accordion-collapse collapse show" data-bs-parent="#advisoryAccordion">
+                        <div class="accordion-body text-muted pt-2 pb-0">
+                            {{ sunny_adv.recommendation }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if rainy_adv %}
+                <div class="accordion-item bg-transparent border-0 mb-2">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed bg-light text-success fw-bold rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#rainyCollapse">
+                            <i class="fas fa-cloud-showers-heavy me-2 text-primary"></i>Rainy Conditions Advice
+                        </button>
+                    </h2>
+                    <div id="rainyCollapse" class="accordion-collapse collapse" data-bs-parent="#advisoryAccordion">
+                        <div class="accordion-body text-muted pt-2 pb-0">
+                            {{ rainy_adv.recommendation }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if cloudy_adv %}
+                <div class="accordion-item bg-transparent border-0">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed bg-light text-success fw-bold rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#cloudyCollapse">
+                            <i class="fas fa-cloud me-2 text-secondary"></i>Cloudy Conditions Advice
+                        </button>
+                    </h2>
+                    <div id="cloudyCollapse" class="accordion-collapse collapse" data-bs-parent="#advisoryAccordion">
+                        <div class="accordion-body text-muted pt-2 pb-0">
+                            {{ cloudy_adv.recommendation }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

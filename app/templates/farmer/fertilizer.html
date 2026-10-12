@@ -1,0 +1,103 @@
+{% extends 'farmer_base.html' %}
+{% block farmer_content %}
+<div class="row">
+    <!-- Form Panel -->
+    <div class="col-12 mb-4">
+        <div class="card card-custom p-4 border-0 shadow-sm">
+            <h4 class="fw-bold text-success mb-3"><i class="fas fa-flask me-2"></i>Fertilizer Advisor</h4>
+            <p class="text-muted">Select your crop and growth stage parameters to calculate exact fertilizer dosages and application rules.</p>
+            
+            <form action="{{ url_for('farmer.fertilizer_recommendation') }}" method="POST">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="crop_name" class="form-label fw-semibold">Target Crop <span class="text-danger">*</span></label>
+                        <select class="form-select" id="crop_name" name="crop_name" required>
+                            <option value="">Select Crop</option>
+                            {% for crop in crops %}
+                            <option value="{{ crop.name }}" {% if inputs and inputs.get('crop_name') == crop.name %}selected{% endif %}>{{ crop.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="soil_type" class="form-label fw-semibold">Soil Type</label>
+                        <select class="form-select" id="soil_type" name="soil_type">
+                            <option value="">All Soils</option>
+                            <option value="Black" {% if inputs and inputs.get('soil_type') == 'Black' %}selected{% endif %}>Black Soil</option>
+                            <option value="Red" {% if inputs and inputs.get('soil_type') == 'Red' %}selected{% endif %}>Red Soil</option>
+                            <option value="Clayey" {% if inputs and inputs.get('soil_type') == 'Clayey' %}selected{% endif %}>Clayey Soil</option>
+                            <option value="Loamy" {% if inputs and inputs.get('soil_type') == 'Loamy' %}selected{% endif %}>Loamy Soil</option>
+                            <option value="Sandy Loam" {% if inputs and inputs.get('soil_type') == 'Sandy Loam' %}selected{% endif %}>Sandy Loam</option>
+                            <option value="Red Loam" {% if inputs and inputs.get('soil_type') == 'Red Loam' %}selected{% endif %}>Red Loam</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="growth_stage" class="form-label fw-semibold">Crop Growth Stage</label>
+                        <select class="form-select" id="growth_stage" name="growth_stage">
+                            <option value="">Any Stage</option>
+                            <option value="Vegetative" {% if inputs and inputs.get('growth_stage') == 'Vegetative' %}selected{% endif %}>Vegetative/Growing Stage</option>
+                            <option value="Flowering" {% if inputs and inputs.get('growth_stage') == 'Flowering' %}selected{% endif %}>Flowering Stage</option>
+                            <option value="Fruiting" {% if inputs and inputs.get('growth_stage') == 'Fruiting' %}selected{% endif %}>Fruiting Stage</option>
+                            <option value="Sowing/Basal" {% if inputs and inputs.get('growth_stage') == 'Sowing/Basal' %}selected{% endif %}>Basal/Sowing Stage</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary-custom w-100 py-2"><i class="fas fa-vial me-2"></i>Calculate Fertilizer Dosage</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Output Panel -->
+    {% if results is not none %}
+    <div class="col-12">
+        <div class="card card-custom p-4 border-0 shadow-sm">
+            <h4 class="fw-bold text-success mb-4"><i class="fas fa-list-check me-2"></i>Calculated Fertilizer Recommendations</h4>
+            
+            {% if results %}
+            <div class="row">
+                {% for r in results %}
+                <div class="col-md-6 mb-4">
+                    <div class="card card-custom h-100 border-start border-4 border-success">
+                        <div class="card-body">
+                            <h5 class="fw-bold text-success mb-3"><i class="fas fa-prescription-bottle me-2"></i>{{ r.name }}</h5>
+                            
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <small class="text-muted d-block">Recommended Quantity</small>
+                                    <span class="fw-bold text-success fs-6">{{ r.recommended_quantity }}</span>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted d-block">Application Method</small>
+                                    <span class="fw-semibold">{{ r.method }}</span>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted d-block">Crop & Soil</small>
+                                    <span class="small">{{ r.crop_name }} ({{ r.soil_type or 'General' }})</span>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted d-block">Growth Stage</small>
+                                    <span class="badge bg-success-subtle text-success">{{ r.growth_stage }}</span>
+                                </div>
+                            </div>
+                            
+                            {% if r.safety_tips %}
+                            <div class="bg-warning-subtle text-warning-emphasis p-3 rounded-3 border-start border-4 border-warning">
+                                <small class="fw-bold d-block mb-1"><i class="fas fa-exclamation-triangle me-1"></i>Safety Tips & Guidelines:</small>
+                                <p class="small mb-0">{{ r.safety_tips }}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-warning mb-0 text-center">
+                <i class="fas fa-info-circle me-2"></i>No matching fertilizer recommendations found for the selected stage and soil combination.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

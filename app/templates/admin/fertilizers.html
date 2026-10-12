@@ -1,0 +1,170 @@
+{% extends 'admin_base.html' %}
+{% block admin_content %}
+<div class="row">
+    <!-- Header -->
+    <div class="col-12 d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-0 text-success">Manage Fertilizers</h2>
+            <p class="text-muted">Register and configure fertilizer dosage recommendations by crop and growth stage.</p>
+        </div>
+        <button class="btn btn-primary-custom" data-bs-toggle="collapse" data-bs-target="#addFertCollapse">
+            <i class="fas fa-plus me-2"></i>Add Fertilizer Rule
+        </button>
+    </div>
+
+    <!-- Collapse Add Fertilizer -->
+    <div class="col-12 mb-4 collapse" id="addFertCollapse">
+        <div class="card card-custom p-4 border-0 shadow-sm">
+            <h5 class="fw-bold text-success mb-3">Add Fertilizer Recommendation</h5>
+            <form action="{{ url_for('admin.manage_fertilizers') }}" method="POST">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Fertilizer Name *</label>
+                        <input type="text" name="name" class="form-control" required placeholder="e.g. Urea">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Crop Name *</label>
+                        <select name="crop_name" class="form-select" required>
+                            {% for c in crops %}
+                            <option value="{{ c.name }}">{{ c.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Soil Type</label>
+                        <input type="text" name="soil_type" class="form-control" placeholder="e.g. Clayey, Loamy">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Growth Stage</label>
+                        <select name="growth_stage" class="form-select">
+                            <option value="Sowing/Basal">Sowing/Basal</option>
+                            <option value="Vegetative">Vegetative</option>
+                            <option value="Flowering">Flowering</option>
+                            <option value="Fruiting">Fruiting</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Recommended Quantity</label>
+                        <input type="text" name="recommended_quantity" class="form-control" placeholder="e.g. 50 kg/acre">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Application Method</label>
+                        <input type="text" name="method" class="form-control" placeholder="e.g. Broadcasting">
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label fw-semibold">Safety Tips</label>
+                        <textarea name="safety_tips" class="form-control" rows="2"></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success px-4 py-2">Create Fertilizer Recommendation</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="col-12">
+        <div class="card card-custom border-0 shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">ID</th>
+                            <th>Fertilizer</th>
+                            <th>Crop</th>
+                            <th>Soil Type</th>
+                            <th>Stage</th>
+                            <th>Quantity</th>
+                            <th>Method</th>
+                            <th class="pe-4 text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if fertilizers %}
+                            {% for f in fertilizers %}
+                            <tr>
+                                <td class="ps-4 text-muted">{{ f.id }}</td>
+                                <td class="fw-bold text-success">{{ f.name }}</td>
+                                <td>{{ f.crop_name }}</td>
+                                <td>{{ f.soil_type or 'General' }}</td>
+                                <td><span class="badge bg-success-subtle text-success">{{ f.growth_stage }}</span></td>
+                                <td>{{ f.recommended_quantity or '-' }}</td>
+                                <td>{{ f.method or '-' }}</td>
+                                <td class="pe-4 text-end">
+                                    <button class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#editFertModal{{ f.id }}">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <a href="{{ url_for('admin.delete_fertilizer', id=f.id) }}" class="btn btn-sm btn-outline-danger btn-delete-confirm" data-confirm-message="Are you sure you want to delete this recommendation?">
+                                        <i class="fas fa-trash-alt"></i> Delete
+                                    </a>
+                                </td>
+                            </tr>
+
+                            <!-- Edit Modal -->
+                            <div class="modal fade" id="editFertModal{{ f.id }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content card-custom p-3 border-0">
+                                        <div class="modal-header border-0 pb-0">
+                                            <h5 class="modal-title fw-bold text-success">Modify Fertilizer Recommendation</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form action="{{ url_for('admin.edit_fertilizer', id=f.id) }}" method="POST">
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label fw-semibold">Fertilizer Name</label>
+                                                        <input type="text" name="name" class="form-control" value="{{ f.name }}" required>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label fw-semibold">Crop Name</label>
+                                                        <input type="text" name="crop_name" class="form-control" value="{{ f.crop_name }}" required>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label fw-semibold">Soil Type</label>
+                                                        <input type="text" name="soil_type" class="form-control" value="{{ f.soil_type or '' }}">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label fw-semibold">Growth Stage</label>
+                                                        <select name="growth_stage" class="form-select">
+                                                            <option value="Sowing/Basal" {% if f.growth_stage == 'Sowing/Basal' %}selected{% endif %}>Sowing/Basal</option>
+                                                            <option value="Vegetative" {% if f.growth_stage == 'Vegetative' %}selected{% endif %}>Vegetative</option>
+                                                            <option value="Flowering" {% if f.growth_stage == 'Flowering' %}selected{% endif %}>Flowering</option>
+                                                            <option value="Fruiting" {% if f.growth_stage == 'Fruiting' %}selected{% endif %}>Fruiting</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label fw-semibold">Recommended Quantity</label>
+                                                        <input type="text" name="recommended_quantity" class="form-control" value="{{ f.recommended_quantity or '' }}">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label fw-semibold">Application Method</label>
+                                                        <input type="text" name="method" class="form-control" value="{{ f.method or '' }}">
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label class="form-label fw-semibold">Safety Tips</label>
+                                                        <textarea name="safety_tips" class="form-control" rows="2">{{ f.safety_tips }}</textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer border-0 pt-0">
+                                                <button type="button" class="btn btn-secondary-custom" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary-custom">Save Changes</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="8" class="text-center py-4 text-muted">No fertilizers configured.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

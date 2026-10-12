@@ -1,0 +1,118 @@
+{% extends 'farmer_base.html' %}
+{% block farmer_content %}
+<div class="row">
+    <!-- Form Panel -->
+    <div class="col-12 mb-4">
+        <div class="card card-custom p-4 border-0 shadow-sm">
+            <h4 class="fw-bold text-success mb-3"><i class="fas fa-magic me-2"></i>Crop Recommendation Engine</h4>
+            <p class="text-muted">Enter cultivation parameters to calculate the most compatible crops for your farm.</p>
+            
+            <form action="{{ url_for('farmer.crop_recommendation') }}" method="POST">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="state" class="form-label fw-semibold">State</label>
+                        <select class="form-select" id="state" name="state" required>
+                            <option value="Karnataka" {% if current_user.state == 'Karnataka' or (inputs and inputs.get('state') == 'Karnataka') %}selected{% endif %}>Karnataka</option>
+                            <option value="Maharashtra" {% if current_user.state == 'Maharashtra' or (inputs and inputs.get('state') == 'Maharashtra') %}selected{% endif %}>Maharashtra</option>
+                            <option value="Andhra Pradesh" {% if current_user.state == 'Andhra Pradesh' or (inputs and inputs.get('state') == 'Andhra Pradesh') %}selected{% endif %}>Andhra Pradesh</option>
+                            <option value="Tamil Nadu" {% if current_user.state == 'Tamil Nadu' or (inputs and inputs.get('state') == 'Tamil Nadu') %}selected{% endif %}>Tamil Nadu</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="district" class="form-label fw-semibold">District</label>
+                        <input type="text" class="form-control" id="district" name="district" value="{{ inputs.get('district') if inputs else (current_user.district or '') }}" required placeholder="e.g. Dharwad">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="season" class="form-label fw-semibold">Season</label>
+                        <select class="form-select" id="season" name="season" required>
+                            <option value="Kharif" {% if inputs and inputs.get('season') == 'Kharif' %}selected{% endif %}>Kharif (Monsoon)</option>
+                            <option value="Rabi" {% if inputs and inputs.get('season') == 'Rabi' %}selected{% endif %}>Rabi (Winter)</option>
+                            <option value="Zaid" {% if inputs and inputs.get('season') == 'Zaid' %}selected{% endif %}>Zaid (Summer)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="soil_type" class="form-label fw-semibold">Soil Type</label>
+                        <select class="form-select" id="soil_type" name="soil_type" required>
+                            <option value="Black" {% if current_user.soil_type == 'Black Soil' or (inputs and 'Black' in inputs.get('soil_type')) %}selected{% endif %}>Black Soil</option>
+                            <option value="Red" {% if current_user.soil_type == 'Red Soil' or (inputs and 'Red' in inputs.get('soil_type')) %}selected{% endif %}>Red Soil</option>
+                            <option value="Clayey" {% if current_user.soil_type == 'Clayey Soil' or (inputs and 'Clayey' in inputs.get('soil_type')) %}selected{% endif %}>Clayey Soil</option>
+                            <option value="Loamy" {% if current_user.soil_type == 'Loamy Soil' or (inputs and 'Loamy' in inputs.get('soil_type')) %}selected{% endif %}>Loamy Soil</option>
+                            <option value="Sandy Loam" {% if current_user.soil_type == 'Sandy Loam' or (inputs and 'Sandy' in inputs.get('soil_type')) %}selected{% endif %}>Sandy Loam</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="water_availability" class="form-label fw-semibold">Water Availability</label>
+                        <select class="form-select" id="water_availability" name="water_availability" required>
+                            <option value="High" {% if inputs and inputs.get('water_availability') == 'High' %}selected{% endif %}>High (Canals/Heavy Rain)</option>
+                            <option value="Medium" {% if inputs and inputs.get('water_availability') == 'Medium' %}selected{% endif %}>Medium (Borewell/Pumps)</option>
+                            <option value="Low" {% if inputs and inputs.get('water_availability') == 'Low' %}selected{% endif %}>Low (Rainfed/Dryland)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="farm_size" class="form-label fw-semibold">Farm Size (in Acres)</label>
+                        <input type="text" class="form-control" id="farm_size" name="farm_size" value="{{ inputs.get('farm_size') if inputs else (current_user.farm_size or '') }}" placeholder="e.g. 5.5">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary-custom w-100 py-2"><i class="fas fa-calculator me-2"></i>Analyze & Recommend Crops</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Recommendations Output Panel -->
+    {% if recommended_crops is not none %}
+    <div class="col-12">
+        <div class="card card-custom p-4 border-0 shadow-sm">
+            <h4 class="fw-bold text-success mb-4"><i class="fas fa-check-double me-2"></i>Suitable Crops Recommendations</h4>
+            
+            {% if recommended_crops %}
+            <div class="row">
+                {% for crop in recommended_crops %}
+                <div class="col-md-6 mb-4">
+                    <div class="card card-custom h-100 border-start border-4 border-success">
+                        <div class="card-body">
+                            <h5 class="fw-bold text-success mb-3"><i class="fas fa-leaf me-2"></i>{{ crop.name }}</h5>
+                            
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <small class="text-muted d-block">Crop Category</small>
+                                    <span class="fw-semibold">{{ crop.type }}</span>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted d-block">Best Season</small>
+                                    <span class="badge bg-success-subtle text-success">{{ crop.growing_season }}</span>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted d-block">Expected Yield</small>
+                                    <span class="fw-semibold text-success">{{ crop.expected_yield }}</span>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted d-block">Water Requirement</small>
+                                    <span class="fw-semibold">{{ crop.water_requirement }}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <small class="text-muted fw-bold d-block mb-1">Growing Tips:</small>
+                                <p class="small text-muted mb-0">{{ crop.growing_tips }}</p>
+                            </div>
+                            
+                            <div>
+                                <small class="text-muted fw-bold d-block mb-1">Commercial Advantages:</small>
+                                <p class="small text-muted mb-0">{{ crop.advantages }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-warning mb-0 text-center">
+                <i class="fas fa-exclamation-triangle me-2"></i>No crops match the exact parameters. Try adjusting the water availability or soil types!
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

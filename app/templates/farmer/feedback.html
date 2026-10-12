@@ -1,0 +1,65 @@
+{% extends 'farmer_base.html' %}
+{% block farmer_content %}
+<div class="row">
+    <!-- Submit Feedback Form -->
+    <div class="col-lg-5 mb-4">
+        <div class="card card-custom p-4 border-0 shadow-sm">
+            <h4 class="fw-bold text-success mb-3"><i class="fas fa-comment-dots me-2"></i>System Feedback</h4>
+            <p class="text-muted">Rate the Smart Agriculture Advisory System and share your suggestions for improvement.</p>
+            
+            <form action="{{ url_for('farmer.feedback') }}" method="POST">
+                <div class="mb-3">
+                    <label for="rating" class="form-label fw-semibold">Rate the System (1 to 5 Stars)</label>
+                    <select class="form-select py-2" id="rating" name="rating" required>
+                        <option value="5" selected>5 Stars - Excellent</option>
+                        <option value="4">4 Stars - Very Good</option>
+                        <option value="3">3 Stars - Good</option>
+                        <option value="2">2 Stars - Fair</option>
+                        <option value="1">1 Star - Poor</option>
+                    </select>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="message" class="form-label fw-semibold">Your Review / Message <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="message" name="message" rows="5" required placeholder="Tell us what you think or what we can add..."></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary-custom w-100 py-2"><i class="fas fa-paper-plane me-2"></i>Submit Feedback</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Feedback History -->
+    <div class="col-lg-7">
+        <div class="card card-custom p-4 border-0 shadow-sm h-100">
+            <h5 class="fw-bold text-success mb-3">Feedback Submission History</h5>
+            
+            <div class="d-flex flex-column gap-3">
+                {% if feedbacks %}
+                    {% for f in feedbacks %}
+                    <div class="p-3 bg-light rounded-4 position-relative">
+                        <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap">
+                            <div class="rating-stars">
+                                {% for i in range(f.rating) %}
+                                <i class="fas fa-star"></i>
+                                {% endfor %}
+                                {% for i in range(5 - f.rating) %}
+                                <i class="far fa-star text-muted"></i>
+                                {% endfor %}
+                            </div>
+                            <span class="badge {% if f.status == 'Reviewed' %}bg-success-subtle text-success{% else %}bg-warning-subtle text-warning{% endif %}">
+                                Status: {{ f.status }}
+                            </span>
+                        </div>
+                        <p class="small text-muted mb-2">{{ f.message }}</p>
+                        <small class="text-muted d-block"><i class="far fa-calendar-alt me-1"></i>Submitted: {{ f.submitted_at.strftime('%d-%b-%Y') }}</small>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted text-center py-5">You haven't submitted any feedback yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

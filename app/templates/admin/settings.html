@@ -1,0 +1,30 @@
+{% extends 'admin_base.html' %}
+{% block admin_content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card card-custom p-4 border-0 shadow-sm border-top border-4 border-danger">
+            <h4 class="fw-bold text-danger mb-3"><i class="fas fa-key me-2"></i>Change Admin Password</h4>
+            <p class="text-muted">Update administrative security credentials. It is highly recommended to change the admin password periodically.</p>
+            
+            <form action="{{ url_for('admin.settings') }}" method="POST" class="mt-4">
+                <div class="mb-3">
+                    <label for="old_password" class="form-label fw-semibold">Current Password</label>
+                    <input type="password" class="form-control py-2" id="old_password" name="old_password" required placeholder="Enter current admin password">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="new_password" class="form-label fw-semibold">New Password</label>
+                    <input type="password" class="form-control py-2" id="new_password" name="new_password" required placeholder="Min 6 characters">
+                </div>
+                
+                <div class="mb-4">
+                    <label for="confirm_new_password" class="form-label fw-semibold">Confirm New Password</label>
+                    <input type="password" class="form-control py-2" id="confirm_new_password" name="confirm_new_password" required placeholder="Retype new password">
+                </div>
+                
+                <button type="submit" class="btn btn-danger w-100 py-2"><i class="fas fa-lock me-2"></i>Update Admin Password</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

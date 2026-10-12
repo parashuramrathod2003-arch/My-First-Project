@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row my-4">
+    <div class="col-12 text-center mb-5">
+        <h1 class="fw-bold">Platform Features</h1>
+        <p class="text-muted">Designed with usability, performance, accessibility, and reliability in mind.</p>
+    </div>
+</div>
+
+<div class="row text-center mb-5">
+    <!-- Feature 1 -->
+    <div class="col-md-4 mb-4">
+        <div class="card card-custom h-100 p-4">
+            <div class="feature-icon-box mx-auto">
+                <i class="fas fa-language"></i>
+            </div>
+            <h5 class="fw-bold">Bilingual Support (English & Kannada)</h5>
+            <p class="text-muted mt-2">Switch between English and Kannada instantly using our header dropdown. Helps local farmers navigate dashboards in their native language.</p>
+        </div>
+    </div>
+    
+    <!-- Feature 2 -->
+    <div class="col-md-4 mb-4">
+        <div class="card card-custom h-100 p-4">
+            <div class="feature-icon-box mx-auto">
+                <i class="fas fa-moon"></i>
+            </div>
+            <h5 class="fw-bold">Dynamic Dark Mode</h5>
+            <p class="text-muted mt-2">A theme switcher changes color palettes to dark mode instantly, easing eye strain during night hours or low-light farm conditions. Settings persist in local storage.</p>
+        </div>
+    </div>
+
+    <!-- Feature 3 -->
+    <div class="col-md-4 mb-4">
+        <div class="card card-custom h-100 p-4">
+            <div class="feature-icon-box mx-auto">
+                <i class="fas fa-mobile-alt"></i>
+            </div>
+            <h5 class="fw-bold">Fully Responsive UI</h5>
+            <p class="text-muted mt-2">Designed using Bootstrap 5 to scale beautifully on smartphones, tablets, laptops, and desktops. Farmers can check updates on their phones while on the field.</p>
+        </div>
+    </div>
+    
+    <!-- Feature 4 -->
+    <div class="col-md-4 mb-4">
+        <div class="card card-custom h-100 p-4">
+            <div class="feature-icon-box mx-auto">
+                <i class="fas fa-bell"></i>
+            </div>
+            <h5 class="fw-bold">Notification Engine</h5>
+            <p class="text-muted mt-2">Farmers receive notifications directly on their dashboards regarding weather warnings, new subsidy opportunities, or price changes.</p>
+        </div>
+    </div>
+
+    <!-- Feature 5 -->
+    <div class="col-md-4 mb-4">
+        <div class="card card-custom h-100 p-4">
+            <div class="feature-icon-box mx-auto">
+                <i class="fas fa-file-csv"></i>
+            </div>
+            <h5 class="fw-bold">Report Export & Printing</h5>
+            <p class="text-muted mt-2">Administrators can generate system reports and export them as CSV data sheets or print them formatted using dedicated print styles.</p>
+        </div>
+    </div>
+    
+    <!-- Feature 6 -->
+    <div class="col-md-4 mb-4">
+        <div class="card card-custom h-100 p-4">
+            <div class="feature-icon-box mx-auto">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h5 class="fw-bold">Secure Authentication & Hashing</h5>
+            <p class="text-muted mt-2">All passwords are encrypted with high-entropy hashing algorithms. Built-in SQL Injection, XSS, and CSRF protective shields keep farmer records safe.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

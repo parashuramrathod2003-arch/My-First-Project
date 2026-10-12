@@ -1,0 +1,151 @@
+{% extends 'admin_base.html' %}
+{% block admin_content %}
+<div class="row">
+    <!-- Header -->
+    <div class="col-12 d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-0 text-success">Manage Farmers</h2>
+            <p class="text-muted">Register, modify, or remove farmer profiles in the database.</p>
+        </div>
+        <button class="btn btn-primary-custom" data-bs-toggle="collapse" data-bs-target="#addFarmerCollapse">
+            <i class="fas fa-user-plus me-2"></i>Add New Farmer
+        </button>
+    </div>
+
+    <!-- Collapse Add Farmer Form -->
+    <div class="col-12 mb-4 collapse" id="addFarmerCollapse">
+        <div class="card card-custom p-4 border-0 shadow-sm">
+            <h5 class="fw-bold text-success mb-3">Add Farmer Account</h5>
+            <form action="{{ url_for('admin.manage_users') }}" method="POST">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Username *</label>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Email *</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Password *</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Full Name *</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Phone Number</label>
+                        <input type="text" name="phone" class="form-control">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">District</label>
+                        <input type="text" name="district" class="form-control" placeholder="e.g. Dharwad">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success px-4 py-2">Create Farmer Account</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Farmers Table List -->
+    <div class="col-12">
+        <div class="card card-custom border-0 shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">ID</th>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Location</th>
+                            <th class="pe-4 text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if users %}
+                            {% for u in users %}
+                            <tr>
+                                <td class="ps-4 text-muted">{{ u.id }}</td>
+                                <td class="fw-bold text-success">{{ u.name }}</td>
+                                <td>{{ u.username }}</td>
+                                <td>{{ u.email }}</td>
+                                <td>{{ u.phone or '-' }}</td>
+                                <td>{{ u.district or '' }}{% if u.state %}, {{ u.state }}{% endif %}</td>
+                                <td class="pe-4 text-end">
+                                    <button class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#editModal{{ u.id }}">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <a href="{{ url_for('admin.delete_user', id=u.id) }}" class="btn btn-sm btn-outline-danger btn-delete-confirm" data-confirm-message="Are you sure you want to delete this farmer account?">
+                                        <i class="fas fa-trash-alt"></i> Delete
+                                    </a>
+                                </td>
+                            </tr>
+
+                            <!-- Edit Modal -->
+                            <div class="modal fade" id="editModal{{ u.id }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content card-custom p-3 border-0">
+                                        <div class="modal-header border-0 pb-0">
+                                            <h5 class="modal-title fw-bold text-success">Modify Farmer Profile</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form action="{{ url_for('admin.edit_user', id=u.id) }}" method="POST">
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-semibold">Full Name</label>
+                                                    <input type="text" name="name" class="form-control" value="{{ u.name }}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-semibold">Email</label>
+                                                    <input type="email" name="email" class="form-control" value="{{ u.email }}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-semibold">Phone</label>
+                                                    <input type="text" name="phone" class="form-control" value="{{ u.phone or '' }}">
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-6 mb-3">
+                                                        <label class="form-label fw-semibold">State</label>
+                                                        <input type="text" name="state" class="form-control" value="{{ u.state or '' }}">
+                                                    </div>
+                                                    <div class="col-6 mb-3">
+                                                        <label class="form-label fw-semibold">District</label>
+                                                        <input type="text" name="district" class="form-control" value="{{ u.district or '' }}">
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-semibold">Soil Type</label>
+                                                    <input type="text" name="soil_type" class="form-control" value="{{ u.soil_type or '' }}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-semibold">New Password (leave blank to keep current)</label>
+                                                    <input type="password" name="password" class="form-control" placeholder="New password">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer border-0 pt-0">
+                                                <button type="button" class="btn btn-secondary-custom" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary-custom">Save Changes</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="7" class="text-center py-4 text-muted">No farmers currently registered.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Inject Admin action scripts -->
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}
